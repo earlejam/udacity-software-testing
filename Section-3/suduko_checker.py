@@ -114,15 +114,18 @@ ROWS_IN_BLOCK = 3
 
 
 def sanity_checks(grid):
-    if not grid or type(grid) not list or len(grid) != NUM_ROWS:
+    if not grid or not isinstance(grid, list) or (len(grid) != NUM_ROWS):
+        print('failed first sc')
         return None
 
     for row in grid:
-        if not row or type(row) not list or len(row) != NUM_ROWS:
+        if not row or not isinstance(row, list) or len(row) != NUM_COLS:
+            print('failed second sc')
             return None
 
         for number in row:
-            if not number or type(number) not int or number < MIN_VALID_NUMBER or number > MAX_VALID_NUMBER:
+            if number is None or not isinstance(number, int) or number < MIN_VALID_NUMBER or number > MAX_VALID_NUMBER:
+                print('failed third sc')
                 return None
 
     return True
@@ -157,7 +160,7 @@ def check_horizontal_values(grid):
 
 # todo - change to account for zero values
 def check_values(values_counts):
-    if values_dict[0] > 0:  # one or more missing values
+    if values_counts[0] > 0:  # one or more missing values
         return check_entries_incomplete(values_counts)
     else:                   # all values filled
         return check_entries_complete(values_counts)
@@ -225,10 +228,10 @@ def check_sudoku(grid):
 
     return all(results)  # returns True (valid) if all checks passed with True (valid), else False
 
-
-print check_sudoku(ill_formed) # --> None
-print check_sudoku(valid)      # --> True
-print check_sudoku(invalid)    # --> False
-print check_sudoku(easy)       # --> True
-print check_sudoku(hard)       # --> True
+if __name__ == "__main__":
+    print check_sudoku(ill_formed) # --> None
+    print check_sudoku(valid)      # --> True
+    print check_sudoku(invalid)    # --> False
+    print check_sudoku(easy)       # --> True
+    print check_sudoku(hard)       # --> True
 
