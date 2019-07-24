@@ -115,17 +115,14 @@ ROWS_IN_BLOCK = 3
 
 def sanity_checks(grid):
     if not grid or not isinstance(grid, list) or (len(grid) != NUM_ROWS):
-        print('failed first sc')
         return None
 
     for row in grid:
         if not row or not isinstance(row, list) or len(row) != NUM_COLS:
-            print('failed second sc')
             return None
 
         for number in row:
             if number is None or not isinstance(number, int) or number < MIN_VALID_NUMBER or number > MAX_VALID_NUMBER:
-                print('failed third sc')
                 return None
 
     return True
@@ -134,14 +131,17 @@ def sanity_checks(grid):
 def check_vertical_values(grid):
     results = []
     col_idx = 0
+
     while col_idx < NUM_COLS:
         values_counts = defaultdict(int)
         for row in grid:
             values_counts[row[col_idx]] += 1
 
+        print('verts: values counts = {}'.format(values_counts.items()))
         results.append(check_values(values_counts))
         col_idx += 1
 
+    print('verts: {}'.format(results))
     return all(results)  # returns True (valid) if all verticals returned True (valid), else False
 
 
@@ -153,41 +153,11 @@ def check_horizontal_values(grid):
         for val in row:
             values_counts[val] += 1
 
+        print('hors: values counts = {}'.format(values_counts.items()))
         results.append(check_values(values_counts))
 
+    print('hors: {}'.format(results))
     return all(results)  # returns True (valid) if all horizontals returned True (valid), else False
-
-
-# todo - change to account for zero values
-def check_values(values_counts):
-    if values_counts[0] > 0:  # one or more missing values
-        return check_entries_incomplete(values_counts)
-    else:                   # all values filled
-        return check_entries_complete(values_counts)
-
-
-def check_entries_complete(values_counts):
-    for count_tuple in values_counts.items():
-        if count_tuple[1] != 1:
-            return False
-
-    return True
-
-
-def check_entries_incomplete(values_counts):
-    num_boxes_filled = BOXES_IN_SET - values_counts[0]
-    total_seen = 0
-
-    for count_tuple in values_counts.items():
-        digit = values_counts[0]
-        count = values_counts[1]
-
-        if digit != 0 and count > 1:
-            return False
-        else:
-            total_seen += count
-
-    return True
 
 
 def check_blocks_of_nine(grid):
@@ -210,9 +180,45 @@ def check_blocks_of_nine(grid):
 
                 row_idx += 1
 
+            print('blocks: values counts = {}'.format(values_counts.items()))
             results.append(check_values(values_counts))
 
+    print('blocks: {}'.format(results))
     return all(results)  # returns True (valid) if all blocks of nine returned True (valid), else False
+
+
+def check_values(values_counts):
+    if values_counts[0] > 0:  # one or more missing values
+        return check_entries_incomplete(values_counts)
+    else:                     # all values filled
+        return check_entries_complete(values_counts)
+
+
+def check_entries_complete(values_counts):
+    for count_tuple in values_counts.items():
+        digit = count_tuple[0]
+        value = count_tuple[1]
+
+        if digit != 0 and value != 1:
+            return False
+
+    return True
+
+
+def check_entries_incomplete(values_counts):
+    num_boxes_filled = BOXES_IN_SET - values_counts[0]
+    total_seen = 0
+
+    for count_tuple in values_counts.items():
+        digit = values_counts[0]
+        count = values_counts[1]
+
+        if digit != 0 and count > 1:
+            return False
+        else:
+            total_seen += count
+
+    return True
 
 
 def check_sudoku(grid):
