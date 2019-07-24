@@ -137,11 +137,11 @@ def check_vertical_values(grid):
         for row in grid:
             values_counts[row[col_idx]] += 1
 
-        print('verts: values counts = {}'.format(values_counts.items()))
+        # print('verts: values counts = {}'.format(values_counts.items()))
         results.append(check_values(values_counts))
         col_idx += 1
 
-    print('verts: {}'.format(results))
+    # print('verts: {}'.format(results))
     return all(results)  # returns True (valid) if all verticals returned True (valid), else False
 
 
@@ -153,37 +153,39 @@ def check_horizontal_values(grid):
         for val in row:
             values_counts[val] += 1
 
-        print('hors: values counts = {}'.format(values_counts.items()))
+        # print('hors: values counts = {}'.format(values_counts.items()))
         results.append(check_values(values_counts))
 
-    print('hors: {}'.format(results))
+    # print('hors: {}'.format(results))
     return all(results)  # returns True (valid) if all horizontals returned True (valid), else False
 
 
 def check_blocks_of_nine(grid):
     results = []
 
-    for row_idx in range(0, 7, 3):       # (0, 3, 6)
-        for col_idx in range(0, 7, 3):   # (0, 3, 6)
+    for global_row_idx in range(0, 7, 3):       # (0, 3, 6)
+        for global_col_idx in range(0, 7, 3):   # (0, 3, 6)
 
             local_row_idx = 0  # will be 0 -> 2 (at this point in grid)
             local_col_idx = 0  # will be 0 -> 2 (at this point in grid)
             values_counts = defaultdict(int)
 
             # add nine entries from block
-            while row_idx < ROWS_IN_BLOCK:
-                while col_idx < COLS_IN_BLOCK:
-                    val = grid[row_idx][col_idx]
+            num_added = 0
+            while local_row_idx < ROWS_IN_BLOCK:
+                for local_col_idx in range(COLS_IN_BLOCK):
+                    eff_row_idx = global_row_idx + local_row_idx
+                    eff_col_idx = global_col_idx + local_col_idx
+
+                    val = grid[eff_row_idx][eff_col_idx]
                     values_counts[val] += 1
 
-                    col_idx += 1
+                local_row_idx += 1
 
-                row_idx += 1
-
-            print('blocks: values counts = {}'.format(values_counts.items()))
+            # print('blocks: values counts = {}'.format(values_counts.items()))
             results.append(check_values(values_counts))
 
-    print('blocks: {}'.format(results))
+    # print('blocks: {}'.format(results))
     return all(results)  # returns True (valid) if all blocks of nine returned True (valid), else False
 
 
