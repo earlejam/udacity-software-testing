@@ -31,20 +31,20 @@ for i in range(NUM_TIMES):
     tgt_file = random.choice(seed_files)
     tgt_app = random.choice(apps)
 
-    buffer = bytearray(open(file_choice, 'rb').read())
+    buffer = bytearray(open(tgt_file, 'rb').read())
 
     # begin Charlie Miller fuzzing code
     numwrites = random.randrange(math.ceil((float(len(buffer)) / FUZZ_FACTOR))) + 1
 
     for j in range(numwrites):
         rand_byte = random.randrange(256)
-        rn = random.randrange(len(buf))
-        buf[rn] = "%c"%(rbyte)
+        rn = random.randrange(len(buffer))
+        buffer[rn] = "%c"%(rand_byte)
     # end Charlie Miller fuzzing code
 
-    open(fuzz_output, 'wb').write(buf)
+    open(fuzzing_out, 'wb').write(buffer)
 
-    process = subprocess.Popen([app, fuzz_output])
+    process = subprocess.Popen([tgt_app, fuzzing_out])
 
     time.sleep(ONE_SECOND)
     crashed = process.poll()
