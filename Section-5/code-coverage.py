@@ -90,5 +90,25 @@ class Queue:
             assert (self.size==0) or (self.size==self.max)
 
 
+
+
+
 # Provide full statement and parameter value coverage of the Queue class
 def test():
+    # constructor
+    # string
+    # clear
+    # empty
+    # full
+    # enqueue not int, not string, not bool
+    # enqueue on full queue
+    # enqueue with wrap around
+    # enqueueall with tuple
+    # enqueueall with list
+    # enqueueall with not enough room
+    # enqueueuall with not a tuple or list
+    # dequeue on empty queue
+    # dequeue with wrap around
+    # checkrep with tail ahead of head
+    # checkrep with head ahead of tail
+    # checkrep with head equal to tail
