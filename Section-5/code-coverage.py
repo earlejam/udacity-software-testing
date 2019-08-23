@@ -169,3 +169,12 @@ def test():
 
     # checkrep with tail ahead of head
     q.checkRep()
+
+    # clear
+    q.clear()
+
+    q.enqueue('a')
+    q.enqueueall(['b', 'c', 'd'])
+    q.checkRep()
+    q.clear()
+
