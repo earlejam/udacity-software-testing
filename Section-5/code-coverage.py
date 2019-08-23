@@ -91,24 +91,81 @@ class Queue:
 
 
 
-
-
 # Provide full statement and parameter value coverage of the Queue class
 def test():
+
     # constructor
-    # string
+    q = Queue(5)
+
     # clear
-    # empty
-    # full
+    is_empty = q.empty()
+    assert is_empty
+
+    # dequeue on empty queue
+    res = q.dequeue()
+    assert res is None
+
+    # checkrep with head equal to tail
+    q.checkRep()
+
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+
     # enqueue not int, not string, not bool
+    res = q.enqueue(3.1415)
+    assert not res
+
+    # checkrep with head ahead of tail
+    q.checkRep()
+
+    q.enqueue(4)
+    q.enqueue(5)
+
+    # full
+    is_full = q.full()
+    assert is_full
+
     # enqueue on full queue
+    res = q.enqueue(6)
+    assert not res
+
+    # string
+    str(q)
+
+    q.dequeue()
+    q.dequeue()
+    q.dequeue()
+
     # enqueue with wrap around
     # enqueueall with tuple
+    vals_to_enqueue = (1, 2)
+    q.enqueueall(vals_to_enqueue)
+    q.checkRep()
+
+    q.dequeue()
+    q.dequeue()
+
     # enqueueall with list
+    vals_to_enqueue = [True, False]
+    q.enqueueall(vals_to_enqueue)
+    q.checkRep()
+
     # enqueueall with not enough room
-    # enqueueuall with not a tuple or list
-    # dequeue on empty queue
+    vals_to_enqueue = ['a', 'b', 'c', 'd']
+    res = q.enqueueall(vals_to_enqueue)
+    assert not res
+    q.checkRep()
+
     # dequeue with wrap around
+    q.dequeue()
+    q.dequeue()
+    q.dequeue()
+
+    # enqueueuall with not a tuple or list
+    vals_to_enqueue = {1, 2, 3, 4, 5}
+    res = q.enqueueall(vals_to_enqueue)
+    assert not res
+
     # checkrep with tail ahead of head
-    # checkrep with head ahead of tail
-    # checkrep with head equal to tail
+    q.checkRep()
