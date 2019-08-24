@@ -40,7 +40,6 @@ def fuzzit(content):
 
     for i in range(NUM_TIMES):
 
-        # turn string into array of unsigned integers
         buf = list(content)
 
         # begin Charlie Miller fuzzing code
@@ -50,8 +49,8 @@ def fuzzit(content):
             rand_byte = random.randrange(256)
             rand_loc = random.randrange(len(buf))
             buf[rand_loc] = '%c'%(rand_byte)
-        
         # end Charlie Miller fuzzing code
+
         modified_texts.append(''.join(buf))
         print(''.join(buf))
 
