@@ -9,9 +9,13 @@
 # The return value of the fuzzit procedure should be a list of 
 # byte-modified strings.
 
+ENCODING = 'utf-8'
+FUZZ_FACTOR = 300
+NUM_TIMES = 1000
 
-import random
+import array
 import math
+import random
 
 content = """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -31,3 +35,25 @@ Aliquam ac erat eget nunc lacinia imperdiet vel id nulla."""
 
 def fuzzit(content):
 # Write a random fuzzer for a simulated text viewer application
+
+    modified_texts = []
+
+    for i in range(NUM_TIMES):
+
+        # turn string into array of unsigned integers
+        buf = array.array('B', map(ord, content))
+
+        # begin Charlie Miller fuzzing code
+        numwrites = random.randrange(math.ceil((float(len(buf)) / FUZZ_FACTOR))) + 1
+
+        for j in range(numwrites):
+            rand_byte = random.randrange(256)
+            rand_loc = random.randrange(len(buf))
+            buf[rand_loc] = ord('%c'%(rand_byte))
+        
+        # end Charlie Miller fuzzing code
+        modified_texts.append(buf.tobytes().decode("ISO-8859-1"))
+
+
+if __name__ == "__main__":
+    fuzzit(content)
