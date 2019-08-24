@@ -10,7 +10,7 @@
 # byte-modified strings.
 
 ENCODING = 'utf-8'
-FUZZ_FACTOR = 300
+FUZZ_FACTOR = 150
 NUM_TIMES = 1000
 
 import array
@@ -41,18 +41,22 @@ def fuzzit(content):
     for i in range(NUM_TIMES):
 
         # turn string into array of unsigned integers
-        buf = array.array('B', map(ord, content))
+        buf = list(content)
 
         # begin Charlie Miller fuzzing code
         numwrites = random.randrange(math.ceil((float(len(buf)) / FUZZ_FACTOR))) + 1
 
-        for j in range(numwrites):
+        for j in range(numwrites * 100):
             rand_byte = random.randrange(256)
             rand_loc = random.randrange(len(buf))
-            buf[rand_loc] = ord('%c'%(rand_byte))
+            buf[rand_loc] = '%c'%(rand_byte)
         
         # end Charlie Miller fuzzing code
-        modified_texts.append(buf.tobytes().decode("ISO-8859-1"))
+        modified_texts.append(''.join(buf))
+        print(''.join(buf))
+
+
+    return modified_texts
 
 
 if __name__ == "__main__":
