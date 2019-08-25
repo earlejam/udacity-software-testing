@@ -37,20 +37,31 @@ class Queue:
         return self.size == self.max
 
     def enqueue(self,x):
-        x = x % 1000
+        # bug 1: did not check for full queue
+        if self.size == self.max:
+            return False
+
         self.data[self.tail] = x
         self.size += 1
         self.tail += 1
+
         if self.tail == self.max:
             self.tail = 0
+        
         return True
 
     def dequeue(self):
+        # bug 2: did not check for empty queue
+        if self.size == 0:
+            return None
+
         x = self.data[self.head]
         self.size -= 1
         self.head += 1
+
         if self.head == self.max:
             self.head = 0
+        
         return x
 
     def checkRep(self):            
@@ -63,8 +74,7 @@ class Queue:
         if self.tail < self.head:
             assert (self.head-self.tail) == (self.max-self.size)
         if self.head == self.tail:
-            assert (self
-                    .size==0) or (self.size==self.max)
+            assert (self.size==0) or (self.size==self.max)
 
 
 # An example list of enqueue integers and dequeue indicators
