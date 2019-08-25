@@ -47,6 +47,15 @@
 
 import array
 import random
+import sys
+
+DEQUEUE_SYM = 'dq'
+ENQUEUE_RATIO = 0.5
+FAILED = 1
+NUM_RUNS = 20000
+SUCCEEDED = 0
+QUEUE_SIZE = 500
+
 
 # Although this specific Queue class has bugs spread
 # throughout the code, do not modify the class.
@@ -98,4 +107,35 @@ class Queue:
 
 
 def random_test():
-# Write a random tester for the Queue class
+    q = Queue(QUEUE_SIZE)
+    results = []
+
+    for _ in range(NUM_RUNS):
+        if (random.random() < ENQUEUE_RATIO):
+            random_input = random.randrange(-1000000000, 1000000000)
+
+            try:
+                q.enqueue(random_input)
+                q.checkRep()
+                success_record = (random_input, SUCCEEDED)
+                results.append(success_record)
+            except:
+                failure_record = (random_input, FAILED)
+                results.append(failure_record)                
+
+        else:
+            try:
+                q.dequeue()
+                q.checkRep()
+                success_record = (DEQUEUE_SYM, SUCCEEDED)
+                results.append(success_record)
+            except:
+                failure_record = (DEQUEUE_SYM, FAILED)
+                results.append(failure_record)
+                
+
+    return results
+
+
+if __name__ == "__main__":
+    random_test()
