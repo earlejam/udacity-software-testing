@@ -19,6 +19,9 @@
 import array
 import random
 
+DEQUEUE_SYM = 'dq'
+QUEUE_SIZE = 500
+
 # Fix this Queue class
 class Queue:
     
@@ -101,5 +104,21 @@ inpts = [(574, 0), ('dq', 0), (991, 0), ('dq', 0), ('dq', 1),
 
 
 # Write a regression tester for the Queue class
-def regression_test():
+def regression_test(usage_records):
+    q = Queue(QUEUE_SIZE)
 
+    for record in usage_records:
+        operation, status = record
+        if operation == DEQUEUE_SYM:
+            q.dequeue()
+            q.checkRep()
+            # todo - check status matches
+        else:
+            input_value = operation
+            q.enqueue(input_value)
+            q.checkRep()
+            # todo - check status matches
+
+
+if __name__ == "__main__":
+    regression_test(inpts)
